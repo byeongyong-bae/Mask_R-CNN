@@ -3,7 +3,7 @@
 R-CNN(2014) --------------> for Object Detection   
 Fast R-CNN(2015) ---------> for Object Detection   
 Faster R-CNN(2016) -------> for Object Detection   
-Mask R-CNN(2017) ---------> for Instance Segmentation   
+Mask R-CNN(2017) --------> for Instance Segmentation   
    
 ### 2. R-CNN   
 Object Detection에 CNN이 사용되기 시작한 것으로 보면, 이미지 분류와 Detection은 밀접한 연관이 있다.   
