@@ -45,10 +45,24 @@ fixed-length feature vector를 input으로 하는 분류기를 마지막에 만�
 Fast R-CNN은 모든 proposal이 네트워크를 커쳐야 하는 R-CNN의 bottleneck 구조의 단점을 개선하고 제안된 방식이다.   
 R-CNN과 가장 큰 차이점은, 각 proposal들이 CNN을 거치는 것이 아니라 전체 이미지에 대해 CNN을 한번 거친 후 출력된 feature map 단계에서 객체 탐지를 수행한다는 것이다.   
    
-#### (1)
-
+#### (1) Rol Pooling(region of interst pooling)   
+모든 Rol Projection마다 convolution 연산을 하는 대신, 입력 이미지에 한번만 CNN을 적용하고 Rol Pooling으로 객체를 판별하기 위한 특징을 추출하는 것이다.   
+Fast R-CNN은 입력 이미지에 대한 한번만 연산된 feature map에 Rol Pooling을 적용시키는 구조를 가지게 된다.   
+R-CNN이 selective search * CNN 의 연산량이라면 Fast R-CNN은 (selecitve search + Rol Pooling) * 1의 연산량이 되는 것이다.   
+이로 인해 연산량이 급격하게 줄어들었다.   
+Rol Pooling은 어떤 output size가 와도 같은 사이즈로 통일시켜주는 역할을 수행한다.   
+RP이후에는 검출된 object의 클래스를 분류하는 softmax 분류기와 bounding box를 추정하는 bbox regressor를 학습한다.   
+   
+#### (2) 요약   
+R-CNN + Rol Pooling (연산속도가 업그레이드)   
+   
+#### (3) 단점   
+하지만 여전히, Rol Projection을 생성하는 시간은 오래걸린다.   
+selective seach를 수행하는 region proposal 부분이 외부에 존재하여 inference에서 bottleneck을 일으킨다.   
+   
+### 4. Faster R-CNN   
 
 ### 참고   
 1. https://yamalab.tistory.com   
 2. https://seongkyun.github.io/papers/2019/01/06/Object_detection/   
-3. https://yamalab.tistory.com/113   
+3. https://mylifemystudy.tistory.com/82   
