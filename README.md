@@ -39,6 +39,9 @@ fixed-length feature vector를 input으로 하는 분류기를 마지막에 만�
 모든 proposal에 대해 CNN을 거쳐야 하므로 연산량이 매우 많다.   
    
 ### 3. Fast R-CNN   
+   
+![fastRCNN](https://user-images.githubusercontent.com/59756209/74311472-ecc3e500-4db2-11ea-9ca8-1cfbcfeb1111.PNG)   
+   
 Fast R-CNN은 모든 proposal이 네트워크를 커쳐야 하는 R-CNN의 bottleneck 구조의 단점을 개선하고 제안된 방식이다.   
 R-CNN과 가장 큰 차이점은, 각 proposal들이 CNN을 거치는 것이 아니라 전체 이미지에 대해 CNN을 한번 거친 후 출력된 feature map 단계에서 객체 탐지를 수행한다는 것이다.   
    
