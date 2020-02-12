@@ -29,4 +29,13 @@ fixed-length feature vector를 input으로 하는 분류기를 마지막에 만�
 
 #### (4) 요약   
 1. selective search 방법으로 image로 부터 Object가 존재할 적절한 region을 추출하기 위해 bounding box 설정   
-2. region을 AlexNet, VggNet의 기반의 CNN 모듈에 통과하여 
+2. region을 AlexNet, VggNet의 기반의 CNN 모듈에 통과한다.   
+3. classify regions을 통해 clasifier와 bounding box regressor로 처리   
+   
+#### (5) 단점   
+모든 proposal에 대해 CNN을 거쳐야 하므로 연산량이 매우 많다.   
+   
+### 3. Fast R-CNN   
+Fast R-CNN은 모든 proposal이 네트워크를 커쳐야 하는 R-CNN의 bottleneck 구조의 단점을 개선하고 제안된 방식
+
+#### (1)
