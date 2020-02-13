@@ -61,9 +61,32 @@ R-CNN + Rol Pooling (연산속도가 업그레이드)
 selective seach를 수행하는 region proposal 부분이 외부에 존재하여 inference에서 bottleneck을 일으킨다.   
    
 ### 4. Faster R-CNN   
+   
+![fasterRCNN](https://user-images.githubusercontent.com/59756209/74398940-7bd90780-4e5c-11ea-9dc9-2ae6dc344249.PNG)   
+   
 selective search없이 region proposal network을 학습하는 구조로 개선시킨 모델이다.   
 RPN(region proposal network)는 feature map을 input으로, RP(Rol Pooling)을 output으로 하는 네트워크으로써, selective search의 열할을 대체한다.   
 
+#### (1) 1x1 convolution   
+1x1 convolution은 pointwise convolution이라고도 한다.   
+채널을 여러개가진 feature map에 대한 채널 축소이다.   
+예로써, 32 x 32 x 512 feature map이 있다고 할때, 1x1 convolution을 거치게 되면 32 x 32 x 128이나 32 x 32 x 1024 와 같은 채널 부분의 parameter size를 변경하는 것이 가능하다.   
+즉, 각 픽셀에 대해 input image parameter와 filter parameter 간의 fully conneted layer와 같은 형태가 된다.   
+이를 통해 CNN layer에서 채널 단위의 축소 또는 확장 기능을 넣어주는 것이다.   
+   
+#### (2) RPN(region proposal network)   
+RPN의 input은 feature map(shared network인 CNN의 output)이다.   
+input feature map에 3 x 3 x 256-d filter로 한번 더 convolution을 해준다. 이 결과, feature map과 동일한 size의 feature map이 된다.   
+예를 들면, 10 x 10 x 256-d 의 feature map이 input 이라면 3 x 3 x 256-d, 1 stride 1 padding filter를 적용하여 10 x 10 x 256-d의 output으로 도출하는 것이다.   
+이 convolution 과정에서 각 지점(anchor)마다 RP를 구한다.   
+output feature map을 1x1 convolution 을 수행하여 2개의 output을 도출한다.   
+2개의 output은 각각 10 x 10 x (9 x 2) 와 10 x 10 x (9 x 4)의 사이즈이다.   
+(9 x 2)는 지점(anchor) * class 이고, (9 x 4)는 지점(anchor) * 4개의 좌표를 의미한다.   
+   
+#### (3) anchor (지점)   
+생성된 2개의 output은 각각 '물체인지 아닌지 판별' 과 'bb box를 예측'하는 용도로 사용된다.   
+anchor는 미리 정의된 reference bounding box이다.   
+다양한 크기와 비율로 n개의 anchor를 미리 정의하고 3 x 3 filter로 sliding window(convolution)를 할때, sliding마다 n개의 bounding box 후보를 생성하는 것이다.   
 
 ### 참고   
 1. https://yamalab.tistory.com   
