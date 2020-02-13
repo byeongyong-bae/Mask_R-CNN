@@ -61,6 +61,9 @@ R-CNN + Rol Pooling (연산속도가 업그레이드)
 selective seach를 수행하는 region proposal 부분이 외부에 존재하여 inference에서 bottleneck을 일으킨다.   
    
 ### 4. Faster R-CNN   
+selective search없이 region proposal network을 학습하는 구조로 개선시킨 모델이다.   
+RPN(region proposal network)는 feature map을 input으로, RP(Rol Pooling)을 output으로 하는 네트워크으로써, selective search의 열할을 대체한다.   
+
 
 ### 참고   
 1. https://yamalab.tistory.com   
