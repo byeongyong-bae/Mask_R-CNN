@@ -11,6 +11,7 @@ Mask R-CNN(2017) --------> for Instance Segmentation
    
 Object Detection에 CNN이 사용되기 시작한 것으로 보면, 이미지 분류와 Detection은 밀접한 연관이 있다.   
 R-CNN은 처음으로 CNN과 같은 딥러닝 기반의 이미지 분류이다.   
+CNN에 region proposal을 추가하여 물체가 있을법한 곳을 제안하고, 그 구역에서 object detection을 하는 것이다.   
 feature extractor로 사용하여 Object Detection, Segmentation에 높은 성능을 보였다.   
    
 #### (1) Region proposal algorithm   
@@ -35,7 +36,7 @@ fixed-length feature vector를 input으로 하는 분류기를 마지막에 만�
 2. region을 AlexNet, VggNet의 기반의 CNN 모듈에 통과한다.   
 3. classify regions을 통해 clasifier와 bounding box regressor로 처리   
    
-#### (5) 단점   
+#### (5) 문제점   
 모든 proposal에 대해 CNN을 거쳐야 하므로 연산량이 매우 많다.   
    
 ### 3. Fast R-CNN   
@@ -56,7 +57,7 @@ RP이후에는 검출된 object의 클래스를 분류하는 softmax 분류기�
 #### (2) 요약   
 R-CNN + Rol Pooling (연산속도가 업그레이드)   
    
-#### (3) 단점   
+#### (3) 문제점   
 하지만 여전히, Rol Projection을 생성하는 시간은 오래걸린다.   
 selective seach를 수행하는 region proposal 부분이 외부에 존재하여 inference에서 bottleneck을 일으킨다.   
    
@@ -64,7 +65,7 @@ selective seach를 수행하는 region proposal 부분이 외부에 존재하여
    
 ![fasterRCNN](https://user-images.githubusercontent.com/59756209/74398940-7bd90780-4e5c-11ea-9dc9-2ae6dc344249.PNG)   
    
-selective search없이 region proposal network을 학습하는 구조로 개선시킨 모델이다.   
+bottleneck을 해결하기 위해 selective search없이 region proposal network을 학습하는 구조로 개선시킨 모델이다.   
 RPN(region proposal network)는 feature map을 input으로, RP(Rol Pooling)을 output으로 하는 네트워크으로써, selective search의 열할을 대체한다.   
 
 #### (1) 1x1 convolution   
@@ -87,8 +88,31 @@ output feature map을 1x1 convolution 을 수행하여 2개의 output을 도출�
 생성된 2개의 output은 각각 '물체인지 아닌지 판별' 과 'bb box를 예측'하는 용도로 사용된다.   
 anchor는 미리 정의된 reference bounding box이다.   
 다양한 크기와 비율로 n개의 anchor를 미리 정의하고 3 x 3 filter로 sliding window(convolution)를 할때, sliding마다 n개의 bounding box 후보를 생성하는 것이다.   
+   
+![anchor](https://user-images.githubusercontent.com/59756209/74400006-02431880-4e60-11ea-8886-c2da6420da88.PNG)   
+   
+위와 같은 진해으로써, n개의 window sliding마다 물체 인식을 위한 2n개의 score와 regression을 위한 4n개의 좌표가 생성된다.   
+이를 이용해  anchor마다 positive와 negative 라벨을 달아주어 train set으로 classifier와 regressor를 학습한다.   
+anchor마다 positive label을 달아주는 기준은 2가지이다.   
+첫번째, 가장 Intersection over Union이 높은 anchor   
+두번쨰, IoU가 0.7이상인 anchor이다.   
+negative label인 경우, positive를 판단할 때와 반대의 기준을 적용한다.   
+   
+#### (4) 요약   
+1. pre-trained CNN의 output을 RPN(region proposal network)에 학습시킨다. (우선적으로 Rol Pooling을 만들어내는 능력을 학습하는 것이다.)   
+2. 1의 output RP를 이용하여 RPN을 제외한 Faster R-CNN 네트워크를 학습시킨다. (이를 통해, sheared CNN, fc layer, detecor 부분이 학습된다.)   
+3. 2의 ouput 에서 다시 한번 1과 같은 절차로 학습한다. (이때, shared CNN 부분은 학습시키지 않는다.)   
+4. 3의 output RP로 다시 한번 모델을 학습시킨다.   
+   
+### 5. Mask R-CNN   
+   
+Mask R-CNN은 Faster R-CNN에서 각 픽셀이 객체인지 아닌지 masking하는 CNN을 추가한 것이다. (binary mask)   
+
 
 ### 참고   
-1. https://yamalab.tistory.com   
-2. https://seongkyun.github.io/papers/2019/01/06/Object_detection/   
-3. https://mylifemystudy.tistory.com/82   
+1. https://seongkyun.github.io/papers/2019/01/06/Object_detection/   
+2. https://mylifemystudy.tistory.com/82   
+3. https://yamalab.tistory.com   
+4. https://www.youtube.com/watch?v=kcPAGIgBGRs   
+5. https://jamiekang.github.io/2017/05/28/faster-r-cnn/   
+6. http://kaiminghe.com/iccv15tutorial/iccv2015_tutorial_convolutional_feature_maps_kaiminghe.pdf   
