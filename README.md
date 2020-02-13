@@ -124,8 +124,11 @@ feature map의 fixel 값을 sampling point의 bilinear interpolation을 통해 f
    
 #### (2) decouple   
 Mask R-CNN은 Mask prediction과 class predictoin을 decouple 했다.   
-이를 통해 mask prediction 에서 다른 클래스를 고려할 필요 없이, binary mask를 predict하면 되기 떄문에 성능의 향상을 보였다.   
-RPN과 masking network를 분리하였다.
+이를 통해 mask prediction 에서 다른 클래스를 고려할 필요 없이, binary mask를 predict하면 되기 떄문에 RPN과 masking network를 분리하여 성능의 향상을 보였다.      
+   
+#### (3) ResNet-FPN Backbone   
+Faster R-CNN에서는 image extration을 수행하는 Convolution bachbonce architecture을 FPN(feature pyramid network)를 사용하였다.   
+하지만 Mask R-CNN에서는 feature extraction을 위해 ResNet-FPN backbone을 이용함으로써, 정확도와 속도 면에서 엄청한 향상을 보였다.
 
 ### 참고   
 1. https://seongkyun.github.io/papers/2019/01/06/Object_detection/   
