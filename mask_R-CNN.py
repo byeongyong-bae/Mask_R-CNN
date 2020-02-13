@@ -1,10 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # # Mask R-CNN을 이용한 X-ray 폐렴 detection
-
-# In[1]:
-
 
 import numpy as np
 import pandas as pd
@@ -24,16 +18,8 @@ import pydicom
 # deep learning의 image data augmentation을 위한 패키지
 from imgaug import augmenters as iaa
 
-
-# In[ ]:
-
-
 # Mask RCNN 설치
 get_ipython().system('git clone https://www.github.com/matterport/Mask_RCNN.git')
-
-
-# In[2]:
-
 
 # Mask R-CNN import
 from mrcnn.config import Config
@@ -42,26 +28,17 @@ import mrcnn.model as modellib
 from mrcnn import visualize
 from mrcnn.model import log
 
-
-# In[3]:
-
-
 # train, test data dir 설정
 data_dir = '/data'
 train_dicom_dir = os.path.join(data_dir, 'train_images')
 test_dicom_dir = os.path.join(data_dir, 'test_images')
 
 
-# In[4]:
-
 
 # 폴더 내 dicom image들을 list로 얻는다.
 def get_dicom_fps(dicom_dir):
     dicom_fps = glob.glob(dicom_dir + '/' + '*.dcm')
     return list(set(dicom_fps))
-
-
-# In[5]:
 
 
 # 위에 설정한 get_dicom_fps를 통해 image list를 얻는다.
@@ -73,9 +50,6 @@ def parse_dataset(dicom_dif, anns):
         fp = os.path.join(dicom_dir, row['patientId'] + ' .dcm')
         image_annotations[fp].append(row)
     return image_fps, image_annotations
-
-
-# In[6]:
 
 
 # 실행 시간을 줄이기 위해 매개변수를 다음과 같이 설정
@@ -121,8 +95,6 @@ class DetectorConfig(Config):
 config = DetectorConfig()
 config.display()
 
-
-# In[ ]:
 
 
 # pneumonia detection을 위한 dataset 
