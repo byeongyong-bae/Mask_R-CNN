@@ -107,6 +107,13 @@ negative label인 경우, positive를 판단할 때와 반대의 기준을 적�
 ### 5. Mask R-CNN   
    
 Mask R-CNN은 Faster R-CNN에서 각 픽셀이 객체인지 아닌지 masking하는 CNN을 추가한 것이다. (binary mask)   
+classification + bounding-box regression + mask branch   
+   
+#### (1) Rol Allign   
+Fast(er) R-CNN은 object detection을 위한 모델이었기 때문에 Rol Pooling에서 정확한 위치 정보를 담는 것이 중요하지 않았다.   
+Rol Pooling에서는 픽셀좌표값을 반올림하여 pooling하기 때문에 input imagte의 원본 위치 정보가 왜곡된다.   
+왜곡되면 classification에서는 문제가 발생하지 않지만 pixel-by-pixel로 detection하는 segmentation에서는 문제가 발생한다.    
+segmentation 기능을 개선하기 위해 Rol Pooling이 아닌 Rol Allign을 적용한다.   
 
 
 ### 참고   
