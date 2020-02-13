@@ -106,6 +106,8 @@ negative label인 경우, positive를 판단할 때와 반대의 기준을 적�
    
 ### 5. Mask R-CNN   
    
+![maskRCNN](https://user-images.githubusercontent.com/59756209/74403525-d11c1580-4e6a-11ea-83c6-0ee38da2a5a2.PNG)   
+   
 Mask R-CNN은 Faster R-CNN에서 각 픽셀이 객체인지 아닌지 masking하는 CNN을 추가한 것이다. (binary mask)   
 classification + bounding-box regression + mask branch   
    
