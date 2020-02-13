@@ -114,7 +114,18 @@ Fast(er) R-CNN은 object detection을 위한 모델이었기 때문에 Rol Pooli
 Rol Pooling에서는 픽셀좌표값을 반올림하여 pooling하기 때문에 input imagte의 원본 위치 정보가 왜곡된다.   
 왜곡되면 classification에서는 문제가 발생하지 않지만 pixel-by-pixel로 detection하는 segmentation에서는 문제가 발생한다.    
 segmentation 기능을 개선하기 위해 Rol Pooling이 아닌 Rol Allign을 적용한다.   
-
+   
+![rollallign](https://user-images.githubusercontent.com/59756209/74401672-5ac8e480-4e65-11ea-890a-e6202e968784.PNG)   
+   
+파란색 점선 grid는 feature map이고, 검은색 line은 4(2x2)개의 sampling point를 가진 Rol이다.   
+Rol Allign은 feature map 위에 있는 grid point로 부터 bilinear interpolation을 하여 각 sampling point 값을 계산하는 것이다.   
+feature map의 fixel 값을 sampling point의 bilinear interpolation을 통해 feature가 차지하고 있는 비율을 곱해주는 것이다.   
+곱해준 값을 max pooling을 적용하여 mask accuracy에서 큰 향상을 보였다.
+   
+#### (2) decouple   
+Mask R-CNN은 Mask prediction과 class predictoin을 decouple 했다.   
+이를 통해 mask prediction 에서 다른 클래스를 고려할 필요 없이, binary mask를 predict하면 되기 떄문에 성능의 향상을 보였다.   
+RPN과 masking network를 분리하였다.
 
 ### 참고   
 1. https://seongkyun.github.io/papers/2019/01/06/Object_detection/   
